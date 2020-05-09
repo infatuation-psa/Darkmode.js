@@ -40,10 +40,6 @@ describe('Given an instance of Darkmode', () => {
     it('should not activate darkmode', () => {
       expect(darkmode.isActivated()).to.be.false;
     })
-
-    it('should set the widget as inactive', () => {
-      expect(document.getElementsByClassName('darkmode-toggle--inactive')[0]).to.not.be.undefined;
-    })
   })
   describe('When I run toggle()', () => {
     it('should activate darkmode', () => {
@@ -55,17 +51,6 @@ describe('Given an instance of Darkmode', () => {
     it('should disactivate darkmode', () => {
       darkmode.toggle();
       expect(darkmode.isActivated()).to.be.false;
-    })
-  })
-  describe('When I run showWidget()', () => {
-    it('the widget should have its label', () => {
-      darkmode.showWidget();
-      expect(document.getElementsByClassName('darkmode-toggle')[0]).to.have.html('🌓');
-    })
-
-    it('should make the widget visible', () => {
-      darkmode.showWidget();
-      expect(document.getElementsByClassName('darkmode-toggle')[0].classList.toString()).to.not.include('darkmode-toggle--inactive');
     })
   })
 

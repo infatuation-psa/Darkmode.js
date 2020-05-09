@@ -13,8 +13,6 @@ export default class Darkmode {
       time: '0.3s',
       mixColor: '#fff',
       backgroundColor: '#fff',
-      buttonColorDark: '#100f2c',
-      buttonColorLight: '#fff',
       label: '',
       saveInCookies: true,
       autoMatchOsTheme: true
@@ -26,18 +24,7 @@ export default class Darkmode {
       .darkmode-layer {
         position: fixed;
         pointer-events: none;
-        background: ${options.mixColor};
         transition: all ${options.time} ease;
-        mix-blend-mode: difference;
-      }
-
-      .darkmode-layer--button {
-        width: 2.9rem;
-        height: 2.9rem;
-        border-radius: 50%;
-        right: ${options.right};
-        bottom: ${options.bottom};
-        left: ${options.left};
       }
 
       .darkmode-layer--simple {
@@ -56,34 +43,8 @@ export default class Darkmode {
       .darkmode-layer--no-transition {
         transition: none;
       }
-
-      .darkmode-toggle {
-        background: ${options.buttonColorDark};
-        width: 3rem;
-        height: 3rem;
-        position: fixed;
-        border-radius: 50%;
-        border:none;
-        right: ${options.right};
-        bottom: ${options.bottom};
-        left: ${options.left};
-        cursor: pointer;
-        transition: all 0.5s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .darkmode-toggle--white {
-        background: ${options.buttonColorLight};
-      }
-
-      .darkmode-toggle--inactive {
-        display: none;
-      }
-
+      
       .darkmode-background {
-        background: ${options.backgroundColor};
         position: fixed;
         pointer-events: none;
         z-index: -10;
@@ -97,22 +58,11 @@ export default class Darkmode {
         isolation: isolate;
         display: inline-block;
       }
-
-      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-        .darkmode-toggle {display: none !important}
-      }
-
-      @supports (-ms-ime-align:auto), (-ms-accelerator:true) {
-        .darkmode-toggle {display: none !important}
-      }
     `;
 
     const layer = document.createElement('div');
-    const button = document.createElement('button');
     const background = document.createElement('div');
 
-    button.innerHTML = options.label;
-    button.classList.add('darkmode-toggle--inactive');
     layer.classList.add('darkmode-layer');
     background.classList.add('darkmode-background');
 
@@ -133,17 +83,14 @@ export default class Darkmode {
         'darkmode-layer--simple',
         'darkmode-layer--no-transition'
       );
-      button.classList.add('darkmode-toggle--white');
       document.body.classList.add('darkmode--activated');
     }
 
-    document.body.insertBefore(button, document.body.firstChild);
     document.body.insertBefore(layer, document.body.firstChild);
     document.body.insertBefore(background, document.body.firstChild);
 
     this.addStyle(css);
 
-    this.button = button;
     this.layer = layer;
     this.saveInCookies = options.saveInCookies;
     this.time = options.time;
@@ -159,45 +106,6 @@ export default class Darkmode {
       'data:text/css;charset=UTF-8,' + encodeURIComponent(css)
     );
     document.head.appendChild(linkElement);
-  }
-
-  showWidget() {
-    if (!IS_BROWSER) {
-      return;
-    }
-    const button = this.button;
-    const layer = this.layer;
-    const time = parseFloat(this.time) * 1000;
-
-    button.classList.add('darkmode-toggle');
-    button.classList.remove('darkmode-toggle--inactive');
-    layer.classList.add('darkmode-layer--button');
-
-    button.addEventListener('click', () => {
-      const isDarkmode = this.isActivated();
-
-      if (!isDarkmode) {
-        layer.classList.add('darkmode-layer--expanded');
-        button.setAttribute('disabled', true);
-        setTimeout(() => {
-          layer.classList.add('darkmode-layer--no-transition');
-          layer.classList.add('darkmode-layer--simple');
-          button.removeAttribute('disabled');
-        }, time);
-      } else {
-        layer.classList.remove('darkmode-layer--simple');
-        button.setAttribute('disabled', true);
-        setTimeout(() => {
-          layer.classList.remove('darkmode-layer--no-transition');
-          layer.classList.remove('darkmode-layer--expanded');
-          button.removeAttribute('disabled');
-        }, 1);
-      }
-
-      button.classList.toggle('darkmode-toggle--white');
-      document.body.classList.toggle('darkmode--activated');
-      window.localStorage.setItem('darkmode', !isDarkmode);
-    });
   }
 
   toggle() {
