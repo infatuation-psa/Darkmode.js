@@ -1,3 +1,6 @@
+THIS IS A FORK OF DARKMODE.JS
+This fork does not have the widget functionality, and it does not style any content on it's own.
+
 # Darkmode.js ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
 🌓 Add a Dark Mode / Night Mode to your website in a few seconds
